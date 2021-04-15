@@ -3,6 +3,7 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
 import React from 'react';
+import { useState } from 'react';
 
 import {
   StyleSheet,
@@ -10,79 +11,81 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  useEffect
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+
+
 
 const Singin = ({navigation}) => {
+  
+  const [name , setName] = useState('');
+  const [surname , setSurname] = useState('');
+  const [password , setPassword] = useState('');
+  const [passwordConfirmation , setPasswordConfirmation] = useState('');
+  const [email , setEmail] = useState('');
+
+  const kayıtOl = () => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          "name": name,
+          "surname": surname,
+          "email": email,
+          "password": password,
+          "password_confirmation": passwordConfirmation
+          
+          })
+    };
+    fetch('http://172.28.1.143:8001/api/auth/register', requestOptions)
+        .then(res =>{
+          console.log(res.status)
+        })
+  }
+
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity>
-        <Text>Ad</Text>
-      </TouchableOpacity>
-
+    <ScrollView  style={styles.container}>
+    <View style={styles.subContainer}>
+      <Text>Ad</Text>
       <TextInput
         style={styles.textInp}
-        placeholder=""
-        placeholderTextColor="black"
-        keyboardType="default"></TextInput>
+        onChangeText={setName}
+        value={name}></TextInput>
 
-      <TouchableOpacity>
-        <Text>Soyad</Text>
-      </TouchableOpacity>
-
+      <Text>Soyad</Text>
       <TextInput
         style={styles.textInp}
-        placeholder=""
-        placeholderTextColor="black"
-        keyboardType="default"></TextInput>
+        onChangeText={setSurname}
+        value = {surname}></TextInput>
 
-      <TouchableOpacity>
-        <Text>Kullanıcı Adı</Text>
-      </TouchableOpacity>
-
+      <Text>Şifre</Text>
       <TextInput
         style={styles.textInp}
-        placeholder=""
-        placeholderTextColor="black"
-        keyboardType="default"></TextInput>
+        onChangeText={setPassword}
+        value = {password}></TextInput>
 
-      <TouchableOpacity>
-        <Text>Şifre</Text>
-      </TouchableOpacity>
-
+      
+      <Text>Şifre Tekrarı</Text>
       <TextInput
         style={styles.textInp}
-        placeholder=""
-        placeholderTextColor="black"
-        secureTextEntry={true}
-        keyboardType="numeric"></TextInput>
+        onChangeText={setPasswordConfirmation}
+        value = {passwordConfirmation}></TextInput>
 
-      <TouchableOpacity>
-        <Text>Şifre Tekrarı</Text>
-      </TouchableOpacity>
-
+      <Text>E-Posta</Text>
       <TextInput
         style={styles.textInp}
-        placeholder=""
-        placeholderTextColor="black"
-        secureTextEntry={true}
-        keyboardType="numeric"></TextInput>
-
-      <TouchableOpacity>
-        <Text>E-Posta</Text>
-      </TouchableOpacity>
-
-      <TextInput
-        style={styles.textInp}
-        placeholder=""
-        placeholderTextColor="black"
-        keyboardType="email-address"></TextInput>
+        onChangeText={setEmail}
+        value = {email}></TextInput>
 
       <TouchableOpacity
         style={styles.touchable}
-        onPress={() => navigation.navigate('Welcome')}>
+        onPress={() => kayıtOl()}>
         <Text>Kayıt Ol</Text>
       </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 };
 
@@ -92,9 +95,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
     flexDirection: 'column',
+  },
+  subContainer:{
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 
   touchable: {
@@ -109,11 +114,11 @@ const styles = StyleSheet.create({
   },
 
   textInp: {
-    width: 300,
-    height: 45,
+    width: 250,
+    height: 40,
     borderWidth: 2,
     borderColor: 'black',
-    borderRadius: 15,
+    borderRadius: 20,
     marginBottom: 30,
   },
 });
