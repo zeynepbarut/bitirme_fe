@@ -13,116 +13,101 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from 'react-native';
 
 import {Picker} from '@react-native-picker/picker';
 
 const Activity = ({navigation}) => {
-  const [pickerValue, setPickerValue] = useState('Javascript');
+  const [pickerValue, setPickerValue] = useState('');
+  const [visibilty, setVisibilty] = useState('');
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity>
-        <Text style={styles.textStyle}>Etkinlik Adı</Text>
-      </TouchableOpacity>
-
-      <TextInput
-        style={styles.textInputFirst}
-        placeholder=""
-        placeholderTextColor="black"
-        keyboardType="default"></TextInput>
-
-      <View style={styles.firstrow}>
-        <View style={styles.thirdrow}>
-          <TouchableOpacity>
-            <Text>Başlangıç Tarihi</Text>
-            <TextInput
-              style={styles.textInputSecond}
-              editable={false}
-              placeholder=""
-              placeholderTextColor="black"></TextInput>
-          </TouchableOpacity>
+    <ScrollView>
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.textStyle}>Etkinlik Adı</Text>
+          <TextInput style={styles.textInputFirst}></TextInput>
         </View>
 
-        <View style={styles.thirdrow}>
-          <TouchableOpacity>
-            <Text>Bitiş Tarihi</Text>
-            <TextInput
-              style={styles.textInputSecond}
-              editable={false}
-              placeholder=""
-              placeholderTextColor="black"></TextInput>
-          </TouchableOpacity>
-        </View>
-      </View>
+        <View style={styles.row}>
+          <View style={styles.thirdrow}>
+            <TouchableOpacity>
+              <Text>Başlangıç Tarihi</Text>
+              <TextInput
+                style={styles.textInputSecond}
+                editable={false}></TextInput>
+            </TouchableOpacity>
+          </View>
 
-      <View style={styles.secondrow}>
-        <View style={styles.thirdrow}>
-          <TouchableOpacity>
-            <Text>Başlangıç Saati</Text>
-            <TextInput
-              style={styles.textInputSecond}
-              editable={false}
-              placeholder=""
-              placeholderTextColor="black"></TextInput>
-          </TouchableOpacity>
+          <View style={styles.thirdrow}>
+            <TouchableOpacity>
+              <Text>Bitiş Tarihi</Text>
+              <TextInput
+                style={styles.textInputSecond}
+                editable={false}></TextInput>
+            </TouchableOpacity>
+          </View>
         </View>
 
-        <View style={styles.thirdrow}>
-          <TouchableOpacity>
-            <Text>Bitiş Saati</Text>
-            <TextInput
-              style={styles.textInputSecond}
-              editable={false}
-              placeholder=""
-              placeholderTextColor="black"></TextInput>
-          </TouchableOpacity>
-        </View>
-      </View>
+        <View style={styles.row}>
+          <View style={styles.thirdrow}>
+            <TouchableOpacity>
+              <Text>Başlangıç Saati</Text>
+              <TextInput
+                style={styles.textInputSecond}
+                editable={false}></TextInput>
+            </TouchableOpacity>
+          </View>
 
-      <TouchableOpacity>
+          <View style={styles.thirdrow}>
+            <TouchableOpacity>
+              <Text>Bitiş Saati</Text>
+              <TextInput
+                style={styles.textInputSecond}
+                editable={false}></TextInput>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View>
         <Text>Davet Et</Text>
-      </TouchableOpacity>
-
-      <Picker
-        style={styles.picker}
-        selectedValue={pickerValue}
-        onValueChange={itemValue => setPickerValue(itemValue)}>
-        <Picker.Item label="User1" value="User1" />
-        <Picker.Item label="User2" value="User2" />
-        <Picker.Item label="User3" value="User3" />
-        <Picker.Item label="User4" value="User4" />
-        <Picker.Item label="User5" value="User5" />
-      </Picker>
-
-      <TouchableOpacity>
+        <View style={styles.picker}>
+        <Picker 
+          selectedValue={pickerValue}
+          onValueChange={itemValue => setPickerValue(itemValue)}>
+          <Picker.Item label="None" value="" />
+          <Picker.Item label="User1" value="User1" />
+          <Picker.Item label="User2" value="User2" />
+          <Picker.Item label="User3" value="User3" />
+          <Picker.Item label="User4" value="User4" />
+          <Picker.Item label="User5" value="User5" />
+        </Picker>
+        </View>
+        </View>
+        <View>
         <Text>Ek Açıklamalar</Text>
-      </TouchableOpacity>
-
-      <TextInput
-        style={styles.textInputThird}
-        placeholder=""
-        placeholderTextColor="black"
-        keyboardType="default"></TextInput>
-
-      <TouchableOpacity>
+        <TextInput
+          style={styles.textInputThird}
+          multiline></TextInput>
+        </View>
+        <View>
         <Text>Görünürlük Belirle</Text>
-      </TouchableOpacity>
-
-      <Picker
-        style={styles.picker}
-        selectedValue={pickerValue}
-        onValueChange={itemValue => setPickerValue(itemValue)}>
-        <Picker.Item label="Herkese Açık" value="Genel" />
-        <Picker.Item label="Özel" value="Özel" />
-      </Picker>
-
-      <TouchableOpacity
-        style={styles.touchable}
-        onPress={() => navigation.navigate('Welcome')}>
-        <Text style={styles.text}>Etkinlik Düzenle</Text>
-      </TouchableOpacity>
-    </View>
+        <View style={styles.picker}>
+        <Picker
+          selectedValue={visibilty}
+          onValueChange={itemValue => setVisibilty(itemValue)}>
+          <Picker.Item label="Herkese Açık" value="Genel" />
+          <Picker.Item label="Özel" value="Özel" />
+        </Picker>
+        </View>
+        </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Welcome')}>
+          <Text style={styles.text}>Etkinlik Düzenle</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -132,13 +117,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    flexWrap: 'nowrap',
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
-  touchable: {
+  button: {
     width: 140,
     height: 50,
     backgroundColor: 'white',
@@ -155,8 +139,8 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 2,
     borderColor: 'black',
-    borderRadius: 7,
-    marginBottom: 60,
+    borderRadius: 30,
+    marginBottom: 30,
   },
 
   textInputSecond: {
@@ -177,43 +161,31 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
 
-  firstrow: {
-    flex: 1,
+  row: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingLeft: 50,
-  },
-
-  secondrow: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingLeft: 50,
   },
 
   thirdrow: {
-    flex: 1,
     flexDirection: 'column',
-    flexWrap: 'wrap',
-    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 20,
   },
 
   textStyle: {
+    paddingLeft: 20,
     marginTop: 40,
   },
 
   picker: {
     width: 300,
     height: 45,
-    borderColor: 'blue',
-    borderWidth: 1,
+    borderColor: '#000',
+    borderWidth: 2,
+    paddingBottom:52,
+    borderRadius: 30,
+    marginBottom: 10,
   },
 });

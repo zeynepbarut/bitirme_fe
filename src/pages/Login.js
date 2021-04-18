@@ -8,67 +8,113 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 
-import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Image, Text} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
+
+  const logOut = async() =>{
+    const jsonValue = await AsyncStorage.getItem('@store_token')
+    const newtoken = JSON.parse(jsonValue)
+    console.log("Çıkış Yapılıyor "+newtoken)
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'text/plain',
+        'Authorization': 'Bearer' + newtoken
+      }
+    }
+    let response = await fetch('http://172.28.1.143:8000/api/auth/logout', requestOptions)
+    let json = await response.json();
+    console.log(json)
+    navigation.navigate('Welcome')
+  }
+
+
   return (
     <View style={styles.container}>
-      <View style={styles.firstrow}>
-        <TouchableOpacity onPress={() => navigation.navigate('Activity')}>
+      <View style={styles.left}>
+        <TouchableOpacity onPress={() =>logOut()}>
           <Image
-            style={styles.image}
-            source={require('../asset/images/etkinlikolustur.jpg')}
+            style={styles.logout}
+            source={require('../asset/images/Logout.png')}
             resizeMode="contain"
             resizeMethod="resize"
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <Image
-            style={styles.image}
-            resizeMode="contain"
-            resizeMethod="resize"
-            source={require('../asset/images/onaybekleyenetkinlikler.jpg')}
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.secondrow}>
-        <TouchableOpacity>
-          <Image
-            style={styles.image}
-            resizeMode="contain"
-            resizeMethod="resize"
-            source={require('../asset/images/takvim.jpg')}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <Image
-            style={styles.image}
-            resizeMode="contain"
-            resizeMethod="resize"
-            source={require('../asset/images/ortaktakvim.jpg')}
-          />
-        </TouchableOpacity>
+      <View style={styles.row}>
+        <View>
+          <TouchableOpacity onPress={() => navigation.navigate('Activity')}>
+            <Image
+              style={styles.image}
+              source={require('../asset/images/Etkinlik.png')}
+              resizeMode="contain"
+              resizeMethod="resize"
+            />
+            <Text style={styles.text}>Yeni Etkinlik</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity>
+            <Image
+              style={styles.image}
+              resizeMode="contain"
+              resizeMethod="resize"
+              source={require('../asset/images/onay.png')}
+            />
+            <Text style={styles.text}>Etkinlik Davetleri</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.thirdrow}>
-        <TouchableOpacity>
-          <Image
-            style={styles.image}
-            resizeMode="contain"
-            resizeMethod="resize"
-            source={require('../asset/images/arkadaslarim.jpg')}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <Image
-            style={styles.image}
-            resizeMode="contain"
-            resizeMethod="resize"
-            source={require('../asset/images/profil.jpg')}
-          />
-        </TouchableOpacity>
+      <View style={styles.row}>
+        <View>
+          <TouchableOpacity>
+            <Image
+              style={styles.image}
+              resizeMode="contain"
+              resizeMethod="resize"
+              source={require('../asset/images/takvim.png')}
+            />
+            <Text style={styles.text}>Takvim</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity>
+            <Image
+              style={styles.image}
+              resizeMode="contain"
+              resizeMethod="resize"
+              source={require('../asset/images/ortak.png')}
+            />
+            <Text style={styles.text}>Ortak Takvim</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.row}>
+        <View>
+          <TouchableOpacity>
+            <Image
+              style={styles.image}
+              resizeMode="contain"
+              resizeMethod="resize"
+              source={require('../asset/images/arkadaşlarım.png')}
+            />
+            <Text style={styles.text}>Arkadaşlarım</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity>
+            <Image
+              style={styles.image}
+              resizeMode="contain"
+              resizeMethod="resize"
+              source={require('../asset/images/profil.png')}
+            />
+            <Text style={styles.text}>Profil</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -80,45 +126,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    flexWrap: 'nowrap',
+    backgroundColor: 'white',
+  },
+
+  row: {
+    flexDirection: 'row',
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-
-  firstrow: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  secondrow: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  thirdrow: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: 'white',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    margin: 10,
   },
 
   image: {
-    width: 130,
-    height: 130,
+    width: 110,
+    height: 110,
     borderColor: 'white',
-    marginTop: 40,
-    marginRight: 10,
-    marginLeft: 10,
+    marginTop: 30,
+    marginRight: 30,
+    marginLeft: 30,
   },
+  logout: {
+    width: 50,
+    height: 50,
+  },
+  left: {
+    alignItems: 'flex-end',
+    marginRight: 20,
+    marginTop:20,
+  },
+  text:{
+    alignSelf: 'center',
+  }
 });

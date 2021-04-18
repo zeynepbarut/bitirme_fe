@@ -20,30 +20,31 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Welcome = ({navigation}) => {
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState('Cihad');
+  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('test2@test.com');
 
   const tokenSave = async(token)=>{
     try {
-      await AsyncStorage.setItem('@store_token', token)
+      const jsonValue = JSON.stringify(token)
+      await AsyncStorage.setItem('@store_token', jsonValue)
     } catch (e) {
       console.log(e)
     }
   }
-  const tokenGet = async()=>{
+  const tokenGet = async () => {
     try {
-      const token = await AsyncStorage.getItem('@store_token')
-      if (token !== null) {
-          Alert.alert("Bu kayıtta veri bulunmamaktadır")
-      }
-      return console.log(token)
-    } catch (e) {
+      const jsonValue = await AsyncStorage.getItem('@store_token')
+      const newtoken = JSON.parse(jsonValue) 
+      console.log("Giriş Yapılıyor "+newtoken)
+      return newtoken
+    } catch(e) {
       console.log(e)
     }
   }
+  
 
-  const girisYap = () => {
+  const girisYap = async() => {
     const requestOptions = {
       method: 'POST',
       headers: {'Content-Type': 'application/json', Accept: 'text/plain'},
@@ -53,25 +54,23 @@ const Welcome = ({navigation}) => {
         password: password,
       }),
     };
-    fetch('http://172.28.1.143:8000/api/auth/login', requestOptions)
-      .then(response => response.json())
-      .then(json => {
-        if(json.status == 200){
-          console.log(json);
-          tokenSave(json.access_token)
-          tokenGet()
-        }
-        else if(json.status == 422){
-          mesError = json.value
-          console.log(mesError)
-          Alert.alert("Giriş Yapılamadı", JSON.stringify(mesError))
-        }else{
-          mesError = json.error;
-          console.log(mesError)
-          Alert.alert("Giriş Yapılamadı", mesError)
-        }
-        
-      });
+      let response = await fetch('http://172.28.1.143:8000/api/auth/login', requestOptions)
+      let json = await response.json();
+      if(json.status == 200){
+        tokenSave(json.access_token)
+        const rawToken = tokenGet()
+        navigation.navigate('Login')
+      }
+      else if(json.status == 422){
+        mesError = json.value
+        console.log(mesError)
+        Alert.alert("Giriş Yapılamadı", JSON.stringify(mesError))
+      }else{
+        mesError = json.error;
+        console.log(mesError)
+        Alert.alert("Giriş Yapılamadı", mesError)
+      }
+
   };
 
   return (
