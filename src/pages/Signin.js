@@ -11,7 +11,8 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  useEffect
+  useEffect,
+  Alert
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -28,7 +29,7 @@ const Singin = ({navigation}) => {
   const kayıtOl = () => {
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept':'text/plain' },
         body: JSON.stringify({
           "name": name,
           "surname": surname,
@@ -38,10 +39,21 @@ const Singin = ({navigation}) => {
           
           })
     };
-    fetch('http://172.28.1.143:8001/api/auth/register', requestOptions)
-        .then(res =>{
-          console.log(res.status)
-        })
+    fetch('http://172.28.1.143:8000/api/auth/register', requestOptions)
+      .then((response) =>response.json()).then((json) => {
+        console.log(json.status);
+        console.log(json.value);
+        if(json.status == 201){
+          navigation.navigate('Welcome')
+        }
+        else{
+          mesError = json.value
+          console.log(mesError)
+          Alert.alert("Kullanıcı oluşturulamadı", JSON.stringify(mesError))
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
   }
 
 
@@ -98,6 +110,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   subContainer:{
+    marginTop: 70,
     alignItems: 'center',
     justifyContent: 'center'
   },
