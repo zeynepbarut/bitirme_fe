@@ -12,7 +12,6 @@ import Welcome from './pages/Welcome';
 import Login from './pages/Login';
 import Signin from './pages/Signin';
 import Activity from './pages/Activity';
-import DatePicker from './pages/DatePicker';
 
 const Stack = createStackNavigator();
 
@@ -40,11 +39,7 @@ const Router = () => {
           component={Activity}
           options={{headerShown: false}}
         />
-        <Stack.Screen
-          name="DatePicker"
-          component={DatePicker}
-          options={{headerShown: false}}
-        />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -57,7 +57,7 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('DatePicker')}>
             <Image
               style={styles.image}
               resizeMode="contain"
