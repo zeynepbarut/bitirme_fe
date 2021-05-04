@@ -15,6 +15,7 @@ import {
   TextInput,
   ScrollView,
   Button,
+  Alert,
 } from 'react-native';
 
 import {Picker} from '@react-native-picker/picker';
@@ -101,11 +102,6 @@ const Activity = ({navigation}) => {
         setId(json.id);
       });
 
-    console.log(userId);
-    console.log(activityName);
-    console.log(mergeStr(startDate));
-    console.log(mergeStr(endDate));
-    console.log(activityDes);
     const requestOptions2 = {
       method: 'POST',
       headers: {'Content-Type': 'application/json', Accept: 'text/plain'},
@@ -128,6 +124,10 @@ const Activity = ({navigation}) => {
     )
       .then(response => response.json())
       .then(json => {
+        if(json.status == 201){
+          Alert.alert("Etkinlik Oluşturuldu")
+          navigation.navigate('Login')
+        }
         console.log(json);
       });
   };

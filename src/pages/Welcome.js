@@ -45,6 +45,7 @@ const Welcome = ({navigation}) => {
   
 
   const girisYap = async() => {
+    let a = 0;
     const requestOptions = {
       method: 'POST',
       headers: {'Content-Type': 'application/json', Accept: 'text/plain'},
@@ -60,16 +61,23 @@ const Welcome = ({navigation}) => {
         tokenSave(json.access_token)
         const rawToken = tokenGet()
         navigation.navigate('Login')
+        a = 1
       }
       else if(json.status == 422){
         mesError = json.value
         console.log(mesError)
         Alert.alert("Giriş Yapılamadı", JSON.stringify(mesError))
-      }else{
+      }
+      else if(a == 0){
+        Alert.alert("Giriş Yapılamadı")
+      }
+      else{
         mesError = json.error;
         console.log(mesError)
         Alert.alert("Giriş Yapılamadı", mesError)
       }
+
+      
 
   };
 
