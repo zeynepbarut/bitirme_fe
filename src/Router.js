@@ -12,6 +12,7 @@ import Welcome from './pages/Welcome';
 import Login from './pages/Login';
 import Signin from './pages/Signin';
 import Activity from './pages/Activity';
+import Takvim from './pages/takvim';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,11 @@ const Router = () => {
         <Stack.Screen
           name="Activity"
           component={Activity}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Takvim"
+          component={Takvim}
           options={{headerShown: false}}
         />
         

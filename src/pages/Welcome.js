@@ -55,7 +55,7 @@ const Welcome = ({navigation}) => {
         password: password,
       }),
     };
-      let response = await fetch('http://172.28.1.143:8000/api/auth/login', requestOptions)
+      let response = await fetch('http://172.28.1.143:5000/api/auth/login', requestOptions)
       let json = await response.json();
       if(json.status == 200){
         tokenSave(json.access_token)

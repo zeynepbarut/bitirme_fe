@@ -94,7 +94,7 @@ const Activity = ({navigation}) => {
       },
     };
     await fetch(
-      'http://172.28.1.143:8000/api/auth/user-profile',
+      'http://172.28.1.143:5000/api/auth/user-profile',
       requestOptions,
     )
       .then(response => response.json())
@@ -119,7 +119,7 @@ const Activity = ({navigation}) => {
       }),
     };
     await fetch(
-      'http://172.28.1.143:8000/api/auth/save-activity',
+      'http://172.28.1.143:5000/api/auth/save-activity',
       requestOptions2,
     )
       .then(response => response.json())
@@ -127,6 +127,8 @@ const Activity = ({navigation}) => {
         if(json.status == 201){
           Alert.alert("Etkinlik Oluşturuldu")
           navigation.navigate('Login')
+        }else{
+          Alert.alert("Etinlik Oluşturulamadı")
         }
         console.log(json);
       });

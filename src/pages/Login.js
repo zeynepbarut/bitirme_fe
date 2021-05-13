@@ -25,7 +25,7 @@ const Login = ({navigation}) => {
         'Authorization': 'Bearer' + newtoken
       }
     }
-    let response = await fetch('http://172.28.1.143:8000/api/auth/logout', requestOptions)
+    let response = await fetch('http://172.28.1.143:5000/api/auth/logout', requestOptions)
     let json = await response.json();
     console.log(json)
     navigation.navigate('Welcome')
@@ -70,7 +70,7 @@ const Login = ({navigation}) => {
       </View>
       <View style={styles.row}>
         <View>
-          <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Takvim')}>
             <Image
               style={styles.image}
               resizeMode="contain"
