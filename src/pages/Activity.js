@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
 /* eslint-disable semi */
 /* eslint-disable keyword-spacing */
@@ -22,8 +23,15 @@ import {Picker} from '@react-native-picker/picker';
 import DatePicker from 'react-native-datepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MultiSelect from 'react-native-multiple-select';
 
 const Activity = ({navigation}) => {
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const onSelectedItemsChange = selectedItems => {
+    setSelectedItems(selectedItems);
+  };
+
   const [userId, setId] = useState('');
   const [activityName, setActivityName] = useState('');
   const [activityDes, setActivityDes] = useState('');
@@ -94,7 +102,7 @@ const Activity = ({navigation}) => {
       },
     };
     await fetch(
-      'http://172.28.1.143:8000/api/auth/user-profile',
+      'http://172.28.1.143:5000/api/auth/user-profile',
       requestOptions,
     )
       .then(response => response.json())
@@ -119,18 +127,31 @@ const Activity = ({navigation}) => {
       }),
     };
     await fetch(
-      'http://172.28.1.143:8000/api/auth/save-activity',
+      'http://172.28.1.143:5000/api/auth/save-activity',
       requestOptions2,
     )
       .then(response => response.json())
       .then(json => {
-        if(json.status == 201){
-          Alert.alert("Etkinlik Oluşturuldu")
-          navigation.navigate('Login')
+        if (json.status == 201) {
+          Alert.alert('Etkinlik Oluşturuldu');
+          navigation.navigate('Login');
         }
         console.log(json);
       });
   };
+
+  const items = [
+    {id: 1, isim: 'user 1'},
+    {id: 2, isim: 'user 2'},
+    {id: 3, isim: 'user 3'},
+    {id: 4, isim: 'user 4'},
+    {id: 5, isim: 'user 5'},
+    {id: 6, isim: 'user 6'},
+    {id: 7, isim: 'user 7'},
+    {id: 8, isim: 'user 8'},
+    {id: 9, isim: 'user 9'},
+    {id: 10, isim: 'user 10'},
+  ];
 
   return (
     <ScrollView>
@@ -200,21 +221,32 @@ const Activity = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
+
         <View>
-          <Text>Davet Et</Text>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={pickerValue}
-              onValueChange={itemValue => setPickerValue(itemValue)}>
-              <Picker.Item label="None" value="" />
-              <Picker.Item label="User1" value="User1" />
-              <Picker.Item label="User2" value="User2" />
-              <Picker.Item label="User3" value="User3" />
-              <Picker.Item label="User4" value="User4" />
-              <Picker.Item label="User5" value="User5" />
-            </Picker>
+          <View style={{borderWidth: 10}}>
+            <MultiSelect
+              hideTags
+              items={items}
+              uniqueKey="id"
+              onSelectedItemsChange={onSelectedItemsChange}
+              selectedItems={selectedItems}
+              selectText="Seçilen Kişiler"
+              searchInputPlaceholderText="Kullanıcı Ara"
+              onChangeInput={text => console.log(text)}
+              tagRemoveIconColor="green"
+              tagBorderColor="#CCC"
+              tagTextColor="#CCC"
+              selectedItemTextColor="red"
+              selectedItemIconColor="red"
+              itemTextColor="black"
+              displayKey="isim"
+              searchInputStyle={{color: '#CCC'}}
+              submitButtonColor="black"
+              submitButtonText="Onayla"
+            />
           </View>
         </View>
+
         <View>
           <Text>Ek Açıklamalar</Text>
           <TextInput

@@ -12,6 +12,7 @@ import Welcome from './pages/Welcome';
 import Login from './pages/Login';
 import Signin from './pages/Signin';
 import Activity from './pages/Activity';
+import Profile from './pages/Profile';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,12 @@ const Router = () => {
         <Stack.Screen
           name="Activity"
           component={Activity}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
           options={{headerShown: false}}
         />
         

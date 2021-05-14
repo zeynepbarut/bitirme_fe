@@ -39,7 +39,7 @@ const Singin = ({navigation}) => {
           
           })
     };
-    fetch('http://172.28.1.143:8000/api/auth/register', requestOptions)
+    fetch('http://172.28.1.143:5000/api/auth/register', requestOptions)// bu şekilde fetch olanalrı 5000 portuna çekeceğiz
       .then((response) =>response.json()).then((json) => {
         console.log(json.status);
         console.log(json.value);
