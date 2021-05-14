@@ -223,7 +223,7 @@ const Activity = ({navigation}) => {
         </View>
 
         <View>
-          <View style={{borderWidth: 10}}>
+          <View style={{width: 300}}>
             <MultiSelect
               hideTags
               items={items}
