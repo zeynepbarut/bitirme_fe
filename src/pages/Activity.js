@@ -83,7 +83,6 @@ const Activity = ({navigation}) => {
   };
 
   const saveActivity = async () => {
-    console.log('funksiyon active');
     const jsonValue = await AsyncStorage.getItem('@store_token');
     const newtoken = JSON.parse(jsonValue);
     console.log(jsonValue);
