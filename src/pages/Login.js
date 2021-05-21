@@ -70,7 +70,7 @@ const Login = ({navigation}) => {
       </View>
       <View style={styles.row}>
         <View>
-          <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Takvim')}>
             <Image
               style={styles.image}
               resizeMode="contain"

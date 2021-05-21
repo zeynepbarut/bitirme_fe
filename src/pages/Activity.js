@@ -132,9 +132,11 @@ const Activity = ({navigation}) => {
     )
       .then(response => response.json())
       .then(json => {
-        if (json.status == 201) {
-          Alert.alert('Etkinlik Oluşturuldu');
-          navigation.navigate('Login');
+        if(json.status == 201){
+          Alert.alert("Etkinlik Oluşturuldu")
+          navigation.navigate('Login')
+        }else{
+          Alert.alert("Etinlik Oluşturulamadı")
         }
         console.log(json);
       });
