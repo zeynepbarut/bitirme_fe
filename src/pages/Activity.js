@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
 /* eslint-disable semi */
@@ -15,7 +16,6 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Button,
   Alert,
 } from 'react-native';
 
@@ -154,7 +154,7 @@ const Activity = ({navigation}) => {
   ];
 
   return (
-    <ScrollView>
+    <ScrollView style ={{backgroundColor:'white'}}>
       <View style={styles.container}>
         <View>
           <Text style={styles.textStyle}>Etkinlik Adı</Text>

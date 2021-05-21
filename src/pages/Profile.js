@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable space-infix-ops */
@@ -10,66 +11,128 @@
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/self-closing-comp */
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import {
   StyleSheet,
   View,
+  TouchableOpacity,
+  Image,
+  Text,
+  TextInput,
 } from 'react-native';
 
-import MultiSelect from 'react-native-multiple-select';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-const items = [
-  {id: 1, isim: 'user 1'},
-  {id: 2, isim: 'user 2'},
-  {id: 3, isim: 'user 3'},
-  {id: 4, isim: 'user 4'},
-  {id: 5, isim: 'user 5'},
-  {id: 6, isim: 'user 6'},
-  {id: 7, isim: 'user 7'},
-  {id: 8, isim: 'user 8'},
-  {id: 9, isim: 'user 9'},
-  {id: 10, isim: 'user 10'},
-];
-
-      const Profile = () => {
-      const [selectedItems, setSelectedItems] = useState([]);
-    
-      const onSelectedItemsChange = (selectedItems) => {
-        setSelectedItems(selectedItems);
-      };
-    
-      return (
-        <View>
-            <MultiSelect
-              hideTags
-              items={items}
-              uniqueKey="id"
-              onSelectedItemsChange={onSelectedItemsChange}
-              selectedItems={selectedItems}
-              selectText="Seçilen Kişiler"
-              searchInputPlaceholderText="Kullanıcı Ara"
-              onChangeInput={(text) => console.log(text)}
-              tagRemoveIconColor="green"
-              tagBorderColor="#CCC"
-              tagTextColor="#CCC"
-              selectedItemTextColor="red"
-              selectedItemIconColor="red"
-              itemTextColor="black"
-              displayKey="isim"
-              searchInputStyle={{color: '#CCC'}}
-              submitButtonColor="black"
-              submitButtonText="Onayla"
-            />
-          </View>
-      );
-    };
-    
-    export default Profile;
-    
-    const styles = StyleSheet.create({
+const Profile = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
   
-    });
+      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <Image
+          style={styles.image}
+          resizeMode="contain"
+          resizeMethod="resize"
+          source={require('../asset/images/profil.png')}
+        />
+      </TouchableOpacity>
+
+      <View style={styles.row}>
+      <Icon.Button name="person" size={20}
+      backgroundColor='gray'></Icon.Button>
+      <TextInput style={styles.textInp}
+       placeholder='Ad'></TextInput>
+      </View>
+
+      <View style={styles.row}>
+      <Icon.Button name="person" size={20}
+      backgroundColor='gray'></Icon.Button>
+      <TextInput style={styles.textInp}
+       placeholder='Soyad'></TextInput>
+      </View>
+
+      <View style={styles.row}>
+      <Icon.Button name="key" size={20}
+      backgroundColor='gray'></Icon.Button>
+      <TextInput style={styles.textInp}
+       placeholder='Şifre'></TextInput>
+      </View>
+
+      <View style={styles.row}>
+      <Icon.Button name="call" size={20}
+      backgroundColor='gray'></Icon.Button>
+      <TextInput style={styles.textInp}
+       placeholder='Telefon'></TextInput>
+      </View>
+
+      <View style={styles.row}>
+      <Icon.Button name="mail" size={20}
+      backgroundColor='gray'></Icon.Button>
+      <TextInput style={styles.textInp}
+       placeholder='E-Posta'></TextInput>
+      </View>
+
+      <View style={styles.row}>
+      <TouchableOpacity
+        style={styles.touchable}>
+        <Text>Düzenle</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.touchable}>
+        <Text>Hesap Sil</Text>
+      </TouchableOpacity>
+    </View>
+    </View>
+
+  );
+};
+
+export default Profile;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  image: {
+    backgroundColor: 'white',
+    width: 110,
+    height: 110,
+    borderColor: 'white',
+    marginTop:20,
+  },
+  row: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  touchable: {
+    width: 130,
+    height: 50,
+    backgroundColor: 'white',
+    marginBottom:20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+    borderWidth: 2,
+  },
+  
+  textInp: {
+    width: 210,
+    height: 40,
+    borderWidth: 2,
+    borderColor: 'black',
+    borderRadius: 10,
+
+  },
+});
+
 
 
 
