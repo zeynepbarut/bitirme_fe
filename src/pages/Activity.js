@@ -112,8 +112,8 @@ const Activity = ({navigation}) => {
         activity_view: 1,
         activity_description: activityDes,
         activity_invited_user: {
-          obj1: {user: 1},
-          obj2: {user: 2},
+          obj1: {user: "user1"},
+          obj2: {user: "user2"},
         },
       }),
     };
