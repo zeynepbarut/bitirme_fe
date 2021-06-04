@@ -22,6 +22,8 @@ import {Picker} from '@react-native-picker/picker';
 import DatePicker from 'react-native-datepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MultiSelect from 'react-native-multiple-select';
+import NewActivity from './NewActivity';
 
 const Activity = ({navigation}) => {
   const [userId, setId] = useState('');
@@ -38,6 +40,8 @@ const Activity = ({navigation}) => {
 
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+
+  const [selectedItems, onSelectedItemsChange] = useState([]);
 
   const onChange = (event, selectedDate) => {
     setShow(false);
@@ -81,14 +85,25 @@ const Activity = ({navigation}) => {
     let c = a + ' ' + b;
     return c;
   };
-
   const saveActivity = async () => {
+    let strBuild = ''
+    const selectedFriend = await AsyncStorage.getItem('@selectedFriend')
+      .then(req => JSON.parse(req))
+      .then(json => {
+        for (let index = 0; index < json.length; index++) {
+          strBuild = strBuild + "obj"+(index+2)+": {user: '" + json[index] +"'},"
+        }
+        strBuild = "{obj1: {user: '"+userId+"'}," + strBuild + "}"
+        console.log(strBuild)
+      });
+
     const jsonValue = await AsyncStorage.getItem('@store_token');
     const newtoken = JSON.parse(jsonValue);
-    console.log(jsonValue);
     const requestOptions = {
       method: 'GET',
       headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: 'Bearer ' + newtoken,
       },
     };
@@ -100,10 +115,10 @@ const Activity = ({navigation}) => {
       .then(json => {
         setId(json.id);
       });
-
+      console.log(strBuild)
     const requestOptions2 = {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', Accept: 'text/plain'},
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         user_id: userId,
         activity_name: activityName,
@@ -111,23 +126,22 @@ const Activity = ({navigation}) => {
         activity_end_date: mergeStr(endDate),
         activity_view: 1,
         activity_description: activityDes,
-        activity_invited_user: {
-          obj1: {user: "user1"},
-          obj2: {user: "user2"},
-        },
+        activity_invited_user: strBuild
       }),
     };
+    console.log(requestOptions2.body)
     await fetch(
       'http://172.28.1.143:5000/api/auth/save-activity',
       requestOptions2,
     )
       .then(response => response.json())
       .then(json => {
-        if(json.status == 201){
-          Alert.alert("Etkinlik Oluşturuldu")
-          navigation.navigate('Login')
-        }else{
-          Alert.alert("Etinlik Oluşturulamadı")
+        if (json.status == 200) {
+          console.log(json.status);
+          Alert.alert('Etkinlik Oluşturuldu');
+          navigation.navigate('Login');
+        } else {
+          Alert.alert('Etinlik Oluşturulamadı');
         }
         console.log(json);
       });
@@ -136,6 +150,8 @@ const Activity = ({navigation}) => {
   return (
     <ScrollView>
       <View style={styles.container}>
+        <View></View>
+
         <View>
           <Text style={styles.textStyle}>Etkinlik Adı</Text>
           <TextInput
@@ -201,20 +217,9 @@ const Activity = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View>
+        <View style={{flex: 1, width: 300}}>
           <Text>Davet Et</Text>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={pickerValue}
-              onValueChange={itemValue => setPickerValue(itemValue)}>
-              <Picker.Item label="None" value="" />
-              <Picker.Item label="User1" value="User1" />
-              <Picker.Item label="User2" value="User2" />
-              <Picker.Item label="User3" value="User3" />
-              <Picker.Item label="User4" value="User4" />
-              <Picker.Item label="User5" value="User5" />
-            </Picker>
-          </View>
+          <NewActivity />
         </View>
         <View>
           <Text>Ek Açıklamalar</Text>
@@ -235,7 +240,11 @@ const Activity = ({navigation}) => {
             </Picker>
           </View>
         </View>
-        <TouchableOpacity style={styles.button} onPress={saveActivity}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            saveActivity();
+          }}>
           <Text style={styles.text}>Etkinlik Düzenle</Text>
         </TouchableOpacity>
         {show && (

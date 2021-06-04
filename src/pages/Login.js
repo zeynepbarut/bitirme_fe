@@ -57,7 +57,7 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity onPress={() => navigation.navigate('DatePicker')}>
+          <TouchableOpacity onPress={() => navigation.navigate('RequestActivity')}>
             <Image
               style={styles.image}
               resizeMode="contain"
@@ -81,7 +81,7 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Ortak')}>
             <Image
               style={styles.image}
               resizeMode="contain"
@@ -94,7 +94,7 @@ const Login = ({navigation}) => {
       </View>
       <View style={styles.row}>
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Friends')}>
             <Image
               style={styles.image}
               resizeMode="contain"
@@ -105,7 +105,7 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{ navigation.navigate('Profil')}}>
             <Image
               style={styles.image}
               resizeMode="contain"

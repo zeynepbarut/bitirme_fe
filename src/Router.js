@@ -13,6 +13,11 @@ import Login from './pages/Login';
 import Signin from './pages/Signin';
 import Activity from './pages/Activity';
 import Takvim from './pages/takvim';
+import Friends from './pages/Friends';
+import Ortak from './pages/Ortak';
+import Profil from './pages/Profil'
+import NewActivity from './pages/NewActivity'
+import RequestActivity from './pages/RequestActivity'
 
 const Stack = createStackNavigator();
 
@@ -20,6 +25,7 @@ const Router = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+      
         <Stack.Screen
           name="Welcome"
           component={Welcome}
@@ -43,6 +49,26 @@ const Router = () => {
         <Stack.Screen
           name="Takvim"
           component={Takvim}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Friends"
+          component={Friends}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Ortak"
+          component={Ortak}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Profil"
+          component={Profil}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="RequestActivity"
+          component={RequestActivity}
           options={{headerShown: false}}
         />
         
