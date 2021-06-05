@@ -18,6 +18,7 @@ import Ortak from './pages/Ortak';
 import Profil from './pages/Profil'
 import NewActivity from './pages/NewActivity'
 import RequestActivity from './pages/RequestActivity'
+import Camera from './pages/Camera'
 
 const Stack = createStackNavigator();
 
@@ -69,6 +70,11 @@ const Router = () => {
         <Stack.Screen
           name="RequestActivity"
           component={RequestActivity}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Camera"
+          component={Camera}
           options={{headerShown: false}}
         />
         

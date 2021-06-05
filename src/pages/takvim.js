@@ -20,23 +20,28 @@ import {
   Modal,
   Pressable,
   TextInput,
+  LogBox
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Calendar, Arrow, CalendarList, Agenda} from 'react-native-calendars';
+import MessageScreen from './MessageScreen';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 const Takvim = ({navigation}) => {
   const [strData, setStrData] = useState('');
   const [takvimData, setTakvimData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [messageVisiable, setMessageVisible] = useState(false);
-  const [detayData, setDetayData] = useState('');
+  const [userId, setUserId] = useState('');
+  const [etkinlikId, setEtkinlikId] = useState('');
   const [etkinlikAdı, setetkinlikAdı] = useState('');
   const [etkinlikstart, setetkinlikstart] = useState('');
   const [etkinlikend, setetkinlikend] = useState('');
   const [etkinlikdavet, setetkinlikdavet] = useState('');
   const [etkinlikaçıklama, setetkinlikaçıklama] = useState('');
   const [etkinlikgörünürlük, setetkinlikgörünürlük] = useState(false);
-  const [value, onChangeText] = React.useState('Gönderinizi Buraya Giriniz');
+  const [value, onChangeText] = React.useState('Notunuzu Buraya Giriniz');
   const [markedDate, setMarkedDate] = useState({});
 
   useEffect(async () => {
@@ -44,6 +49,10 @@ const Takvim = ({navigation}) => {
     let token = await getToken();
     await saveUserId(token);
   }, []);
+
+  
+
+  
 
   const getToken = async () => {
     const jsonValue = await AsyncStorage.getItem('@store_token');
@@ -66,6 +75,7 @@ const Takvim = ({navigation}) => {
       .then(response => response.json())
       .then(json => {
         a = json.id;
+        setUserId(a);
         return a;
       })
       .then(async deger => {
@@ -142,6 +152,7 @@ const Takvim = ({navigation}) => {
       requestOptions3,
     );
     await res.json().then(body3 => {
+      setEtkinlikId(body3[0]['activity_id']);
       setetkinlikAdı(body3[0]['activity_name']);
       setetkinlikstart(body3[0]['activity_start_date']);
       setetkinlikend(body3[0]['activity_end_date']);
@@ -187,7 +198,6 @@ const Takvim = ({navigation}) => {
 
     return veri;
   };
-
   const ModalInside = () => {
     if (messageVisiable == false) {
       return (
@@ -318,66 +328,7 @@ const Takvim = ({navigation}) => {
     } else {
       return (
         <View style={styles.blackBackground}>
-          <View style={styles.poupContainer}>
-            <ScrollView>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  justifyContent: 'space-around',
-                  height: 635,
-                }}>
-                <View
-                  style={{
-                    width: 300,
-                    height: 500,
-                    borderWidth: 1,
-                    marginBottom: 10,
-                    borderRadius: 5,
-                    marginTop: 10,
-                  }}></View>
-                <View
-                  style={{
-                    width: 300,
-                    height: 100,
-                    borderWidth: 1,
-                    marginBottom: 10,
-                    borderRadius: 5,
-                    marginTop: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <TextInput
-                    style={{
-                      width: 230,
-                      height: 80,
-                      backgroundColor: '#efefef',
-                      marginLeft: 10,
-                      borderRadius: 10,
-                    }}
-                    editable
-                    multiline
-                    numberOfLines={5}
-                    maxLength={150}
-                    onChangeText={text => onChangeText(text)}
-                    value={value}></TextInput>
-                  <TouchableOpacity style={{marginRight: 2}}>
-                    <Text
-                      style={{
-                        width: 50,
-                        height: 80,
-                        textAlign: 'center',
-                        textAlignVertical: 'center',
-                        backgroundColor: '#cfcfcf',
-                        borderRadius: 10,
-                      }}>
-                      Gönder
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ScrollView>
-          </View>
+          <MessageScreen userId = {userId} etkinlikId = {etkinlikId}/>
         </View>
       );
     }

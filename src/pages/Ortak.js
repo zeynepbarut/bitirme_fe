@@ -24,7 +24,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Calendar, Arrow, CalendarList, Agenda} from 'react-native-calendars';
 
-const Takvim = ({navigation}) => {
+const Ortak = ({navigation}) => {
   const [strData, setStrData] = useState('');
   const [takvimData, setTakvimData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
@@ -438,7 +438,7 @@ const Takvim = ({navigation}) => {
   );
 };
 
-export default Takvim;
+export default Ortak;
 
 const styles = StyleSheet.create({
   container: {
