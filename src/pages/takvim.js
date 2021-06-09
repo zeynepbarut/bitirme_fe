@@ -130,8 +130,8 @@ const Takvim = ({navigation}) => {
     let raw2 = "}";
     lastraw = raw1 + son + raw2;
     let a =JSON.parse(lastraw)
+    console.log(a)
     setMarkedDate(a)
-    return console.log("Çıktı");
   };
 
   
@@ -175,6 +175,7 @@ const Takvim = ({navigation}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             width: 390,
+            marginBottom:10,
           }}>
           <TouchableOpacity
             style={{flexDirection: 'row'}}
@@ -182,13 +183,13 @@ const Takvim = ({navigation}) => {
               EtkinlikDetay(strData[i + 2], strData[i + 6], strData[i + 10]);
               setModalVisible(true);
             }}>
-            <View style={{margin: 10, marginRight: 20}}>
+            <View style={{width:100}}>
               <Text>{strData[i + 2]}</Text>
             </View>
-            <View style={{margin: 10}}>
+            <View style={{width:145}}>
               <Text>{strData[i + 6]}</Text>
             </View>
-            <View style={{margin: 10}}>
+            <View style={{width:145}}>
               <Text>{strData[i + 10]}</Text>
             </View>
           </TouchableOpacity>
@@ -377,9 +378,9 @@ const Takvim = ({navigation}) => {
         <View style={{marginTop: 10, alignItems: 'center'}}>
           <View
             style={{flexDirection: 'row', alignItems: 'center', width: 390}}>
-            <Text style={{marginRight: 20}}>Activity Name</Text>
-            <Text style={{marginRight: 40}}>Activity Start Date</Text>
-            <Text>Activity End Date</Text>
+            <Text style={{width:100}}>Activity Name</Text>
+            <Text style={{width:145}}>Activity Start Date</Text>
+            <Text style={{width:145}}>Activity End Date</Text>
           </View>
           <View style={{borderBottomWidth: 1, width: 400}}></View>
         </View>

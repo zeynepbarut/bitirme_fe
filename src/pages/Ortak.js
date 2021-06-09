@@ -25,6 +25,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Calendar, Arrow, CalendarList, Agenda} from 'react-native-calendars';
 
 const Ortak = ({navigation}) => {
+  let objTakvim = ''
   const [strData, setStrData] = useState('');
   const [takvimData, setTakvimData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,9 +41,12 @@ const Ortak = ({navigation}) => {
   const [markedDate, setMarkedDate] = useState({});
 
   useEffect(async () => {
-    await DataBuild()
+    
     let token = await getToken();
     await saveUserId(token);
+    SetMarkedDateFunc(objTakvim)
+    
+    
   }, []);
 
   const getToken = async () => {
@@ -69,12 +73,13 @@ const Ortak = ({navigation}) => {
         return a;
       })
       .then(async deger => {
-        
-        await getUserActivity(deger);
+        await getOrtakActivity(deger);
       });
   };
 
-  const getUserActivity = async b => {
+ 
+
+  const getOrtakActivity = async b => {
     const requestOptions2 = {
       method: 'POST',
       headers: {'Content-Type': 'application/json', Accept: 'text/plain'},
@@ -84,47 +89,17 @@ const Ortak = ({navigation}) => {
     };
 
     let response2 = await fetch(
-      'http://172.28.1.143:5000/api/auth/get-user-activity',
+      'http://172.28.1.143:5000/api/auth/get-ortak-activity',
       requestOptions2,
     );
     await response2.json().then(body2 => {
-      setStrData(JSON.stringify(body2.Activities).split('"'));
+      setStrData(body2);
     });
   };
   let modelIn = [];
   let raw = '';
   let son = '';
   let lastraw = '';
-
-  const DataBuild = async () => {
-    lastraw = '';
-    raw = '';
-    son = '';
-    for (let i = 1; i < strData.length; i = i + 12) {
-      let parca1 = JSON.stringify(strData[i + 6]).split(' ');
-      let parca2 = JSON.stringify(strData[i + 10]).split(' ');
-      
-      let startDate = parca1[0].substring(1);
-      let endDate = parca2[0].substring(1);
-      let raw3 = '"';
-      let raw4 = '": {"color": "#125678", "textColor": "white"},';
-      if ((i + 10) == (strData.length - 2)) {
-        let raw5 = '": {"color": "#125678", "textColor": "white"}'
-        son = son + raw3 + startDate + raw4 + raw3 + endDate + raw5;
-      }else{
-        son = son + raw3 + startDate + raw4 + raw3 + endDate + raw4;
-      }
-      
-    }
-    let raw1 = "{";
-    let raw2 = "}";
-    lastraw = raw1 + son + raw2;
-    let a =JSON.parse(lastraw)
-    setMarkedDate(a)
-    return console.log("Çıktı");
-  };
-
-  
 
   const EtkinlikDetay = async (name, start, end) => {
     const requestOptions3 = {
@@ -155,36 +130,83 @@ const Ortak = ({navigation}) => {
     });
   };
 
+  const SetMarkedDateFunc = (deger) =>{
+    return setMarkedDate(deger)
+  }
   const Str = () => {
     let veri = [];
-    for (let i = 1; i < strData.length; i = i + 12) {
+    let renk = '#467523';
+    raw = '';
+    son = '';
+    for (let i = 0; i < strData.length; i++) {
+
+      if (strData[i]['name'] == "Ahmet") {
+        renk = '#156369'
+      }
+      if (strData[i]['name'] == "Cihad") {
+        renk = '#966369'
+      }
+
+      let startDate = strData[i]['activity_start_date'];
+      startDate = startDate.substring(0,10)
+      let endDate = strData[i]['activity_end_date'];
+      endDate = endDate.substring(0,10)
+      if ((i+1) == strData.length) {
+        son = son + '"' + startDate +'": {"color": "' + renk +'", "textColor": "white"},"' + endDate + '":{"color":"' + renk +'", "textColor":"white"}';
+      } else {
+        son = son + '"' + startDate +'": {"color": "' + renk +'", "textColor": "white"},"' + endDate + '":{"color":"' + renk+'", "textColor":"white"},';
+      }
+
       veri.push(
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             width: 390,
+            marginTop: 5,
+            marginBottom: 5,
+            borderRadius: 10,
+            backgroundColor: renk,
           }}>
           <TouchableOpacity
             style={{flexDirection: 'row'}}
             onPress={() => {
-              EtkinlikDetay(strData[i + 2], strData[i + 6], strData[i + 10]);
+              EtkinlikDetay(
+                strData[i]['activity_name'],
+                strData[i]['activity_start_date'],
+                strData[i]['activity_end_date'],
+              );
               setModalVisible(true);
             }}>
-            <View style={{margin: 10, marginRight: 20}}>
-              <Text>{strData[i + 2]}</Text>
+            <View style={{width: 125, justifyContent: 'center'}}>
+              <Text style={{textAlign: 'center'}}>{strData[i]['name']}</Text>
             </View>
-            <View style={{margin: 10}}>
-              <Text>{strData[i + 6]}</Text>
+            <View style={{width: 125, justifyContent: 'center'}}>
+              <Text style={{textAlign: 'center'}}>
+                {strData[i]['activity_name']}
+              </Text>
             </View>
-            <View style={{margin: 10}}>
-              <Text>{strData[i + 10]}</Text>
+            <View style={{width: 130, justifyContent: 'center'}}>
+              <Text style={{textAlign: 'center'}}>
+                {strData[i]['activity_start_date']}
+              </Text>
+              <Text style={{textAlign: 'center'}}>
+                {strData[i]['activity_end_date']}
+              </Text>
             </View>
           </TouchableOpacity>
         </View>,
       );
-    }
 
+      // if (i + 1 == strData.length) {
+      //   console.log("1");
+      // }else if (strData[i]['name'] != strData[i + 1]['name']) {
+      //   renk = Math.floor(Math.random() * (999 - 100) + 100);
+      //   renk = '#' + renk;
+      // }
+    }
+    son = '{' + son + '}';
+    objTakvim = JSON.parse(son)
     return veri;
   };
 
@@ -278,23 +300,6 @@ const Ortak = ({navigation}) => {
                   {etkinlikgörünürlük}
                 </Text>
               </View>
-              <TouchableOpacity
-                onPress={() => {
-                  setMessageVisible(true);
-                }}>
-                <Text
-                  style={{
-                    alignSelf: 'center',
-                    borderWidth: 1,
-                    width: 100,
-                    height: 40,
-                    borderRadius: 20,
-                    textAlign: 'center',
-                    backgroundColor: '#cfcfcf',
-                  }}>
-                  Etkinlik Gönderileri
-                </Text>
-              </TouchableOpacity>
               <TouchableOpacity>
                 <Text
                   style={{
@@ -426,9 +431,13 @@ const Ortak = ({navigation}) => {
         <View style={{marginTop: 10, alignItems: 'center'}}>
           <View
             style={{flexDirection: 'row', alignItems: 'center', width: 390}}>
-            <Text style={{marginRight: 20}}>Activity Name</Text>
-            <Text style={{marginRight: 40}}>Activity Start Date</Text>
-            <Text>Activity End Date</Text>
+            <Text style={{textAlign: 'center', width: 130}}>Activity Name</Text>
+            <Text style={{textAlign: 'center', width: 130}}>
+              Activity Start Date
+            </Text>
+            <Text style={{textAlign: 'center', width: 130}}>
+              Activity End Date
+            </Text>
           </View>
           <View style={{borderBottomWidth: 1, width: 400}}></View>
         </View>
