@@ -19,6 +19,8 @@ import Profil from './pages/Profil'
 import NewActivity from './pages/NewActivity'
 import RequestActivity from './pages/RequestActivity'
 import Camera from './pages/Camera'
+import Filtre from './pages/Filtre'
+import FriendTakvim from './pages/FriendTakvim'
 
 const Stack = createStackNavigator();
 
@@ -75,6 +77,16 @@ const Router = () => {
         <Stack.Screen
           name="Camera"
           component={Camera}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Filtre"
+          component={Filtre}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="FriendTakvim"
+          component={FriendTakvim}
           options={{headerShown: false}}
         />
         

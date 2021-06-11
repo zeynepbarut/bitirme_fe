@@ -25,28 +25,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Calendar, Arrow, CalendarList, Agenda} from 'react-native-calendars';
 
 const Ortak = ({navigation}) => {
-  let objTakvim = ''
+  let objTakvim = '';
   const [strData, setStrData] = useState('');
   const [takvimData, setTakvimData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
-  const [messageVisiable, setMessageVisible] = useState(false);
-  const [detayData, setDetayData] = useState('');
   const [etkinlikAdı, setetkinlikAdı] = useState('');
   const [etkinlikstart, setetkinlikstart] = useState('');
   const [etkinlikend, setetkinlikend] = useState('');
   const [etkinlikdavet, setetkinlikdavet] = useState('');
   const [etkinlikaçıklama, setetkinlikaçıklama] = useState('');
   const [etkinlikgörünürlük, setetkinlikgörünürlük] = useState(false);
-  const [value, onChangeText] = React.useState('Gönderinizi Buraya Giriniz');
   const [markedDate, setMarkedDate] = useState({});
 
   useEffect(async () => {
-    
     let token = await getToken();
     await saveUserId(token);
-    SetMarkedDateFunc(objTakvim)
-    
-    
+    SetMarkedDateFunc(objTakvim);
   }, []);
 
   const getToken = async () => {
@@ -77,8 +71,6 @@ const Ortak = ({navigation}) => {
       });
   };
 
- 
-
   const getOrtakActivity = async b => {
     const requestOptions2 = {
       method: 'POST',
@@ -96,10 +88,8 @@ const Ortak = ({navigation}) => {
       setStrData(body2);
     });
   };
-  let modelIn = [];
   let raw = '';
   let son = '';
-  let lastraw = '';
 
   const EtkinlikDetay = async (name, start, end) => {
     const requestOptions3 = {
@@ -130,31 +120,50 @@ const Ortak = ({navigation}) => {
     });
   };
 
-  const SetMarkedDateFunc = (deger) =>{
-    return setMarkedDate(deger)
-  }
+  const SetMarkedDateFunc = deger => {
+    return setMarkedDate(deger);
+  };
   const Str = () => {
     let veri = [];
     let renk = '#467523';
     raw = '';
     son = '';
     for (let i = 0; i < strData.length; i++) {
-
-      if (strData[i]['name'] == "Ahmet") {
-        renk = '#156369'
+      if (strData[i]['name'] == 'Ahmet') {
+        renk = '#156369';
       }
-      if (strData[i]['name'] == "Cihad") {
-        renk = '#966369'
+      if (strData[i]['name'] == 'Cihad') {
+        renk = '#966369';
       }
 
       let startDate = strData[i]['activity_start_date'];
-      startDate = startDate.substring(0,10)
+      startDate = startDate.substring(0, 10);
       let endDate = strData[i]['activity_end_date'];
-      endDate = endDate.substring(0,10)
-      if ((i+1) == strData.length) {
-        son = son + '"' + startDate +'": {"color": "' + renk +'", "textColor": "white"},"' + endDate + '":{"color":"' + renk +'", "textColor":"white"}';
+      endDate = endDate.substring(0, 10);
+      if (i + 1 == strData.length) {
+        son =
+          son +
+          '"' +
+          startDate +
+          '": {"color": "' +
+          renk +
+          '", "textColor": "white"},"' +
+          endDate +
+          '":{"color":"' +
+          renk +
+          '", "textColor":"white"}';
       } else {
-        son = son + '"' + startDate +'": {"color": "' + renk +'", "textColor": "white"},"' + endDate + '":{"color":"' + renk+'", "textColor":"white"},';
+        son =
+          son +
+          '"' +
+          startDate +
+          '": {"color": "' +
+          renk +
+          '", "textColor": "white"},"' +
+          endDate +
+          '":{"color":"' +
+          renk +
+          '", "textColor":"white"},';
       }
 
       veri.push(
@@ -206,186 +215,101 @@ const Ortak = ({navigation}) => {
       // }
     }
     son = '{' + son + '}';
-    objTakvim = JSON.parse(son)
+    objTakvim = JSON.parse(son);
     return veri;
   };
 
   const ModalInside = () => {
-    if (messageVisiable == false) {
-      return (
-        <View style={styles.blackBackground}>
-          <View style={styles.poupContainer}>
-            <ScrollView>
-              <View style={{margin: 10}}>
-                <Text style={{marginLeft: 7}}>Etkinlik Adı</Text>
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    width: 250,
-                    height: 30,
-                    borderRadius: 8,
-                    textAlignVertical: 'center',
-                    paddingLeft: 5,
-                  }}>
-                  {etkinlikAdı}
-                </Text>
-              </View>
-              <View style={{margin: 10}}>
-                <Text style={{marginLeft: 7}}>Etkinlik Başlangıç Tarihi</Text>
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    width: 250,
-                    height: 30,
-                    borderRadius: 8,
-                    textAlignVertical: 'center',
-                    paddingLeft: 5,
-                  }}>
-                  {etkinlikstart}
-                </Text>
-              </View>
-              <View style={{margin: 10}}>
-                <Text style={{marginLeft: 7}}>Etkinlik Bitiş Tarihi</Text>
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    width: 250,
-                    height: 30,
-                    borderRadius: 8,
-                    textAlignVertical: 'center',
-                    paddingLeft: 5,
-                  }}>
-                  {etkinlikend}
-                </Text>
-              </View>
-              <View style={{margin: 10}}>
-                <Text style={{marginLeft: 7}}>Davet Edilen Kullanıcılar</Text>
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    width: 250,
-                    height: 30,
-                    borderRadius: 8,
-                    textAlignVertical: 'center',
-                    paddingLeft: 5,
-                  }}>
-                  {etkinlikdavet}
-                </Text>
-              </View>
-              <View style={{margin: 10}}>
-                <Text style={{marginLeft: 7}}>Açıklamalar</Text>
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    width: 250,
-                    height: 30,
-                    borderRadius: 8,
-                    textAlignVertical: 'center',
-                    paddingLeft: 5,
-                  }}>
-                  {etkinlikaçıklama}
-                </Text>
-              </View>
-              <View style={{margin: 10}}>
-                <Text style={{marginLeft: 7}}>Görünürlük</Text>
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    width: 250,
-                    height: 30,
-                    borderRadius: 8,
-                    textAlignVertical: 'center',
-                    paddingLeft: 5,
-                  }}>
-                  {etkinlikgörünürlük}
-                </Text>
-              </View>
-              <TouchableOpacity>
-                <Text
-                  style={{
-                    alignSelf: 'center',
-                    borderWidth: 1,
-                    width: 100,
-                    height: 40,
-                    borderRadius: 20,
-                    textAlignVertical: 'center',
-                    textAlign: 'center',
-                    backgroundColor: '#cfcfcf',
-                    margin: 20,
-                  }}>
-                  Etkinlik Düzenle
-                </Text>
-              </TouchableOpacity>
-            </ScrollView>
+    return (
+      <View style={styles.blackBackground}>
+        <View style={styles.poupContainer}>
+          <View style={{margin: 10}}>
+            <Text style={{marginLeft: 7}}>Etkinlik Adı</Text>
+            <Text
+              style={{
+                borderWidth: 2,
+                width: 250,
+                height: 30,
+                borderRadius: 8,
+                textAlignVertical: 'center',
+                paddingLeft: 5,
+              }}>
+              {etkinlikAdı}
+            </Text>
+          </View>
+          <View style={{margin: 10}}>
+            <Text style={{marginLeft: 7}}>Etkinlik Başlangıç Tarihi</Text>
+            <Text
+              style={{
+                borderWidth: 2,
+                width: 250,
+                height: 30,
+                borderRadius: 8,
+                textAlignVertical: 'center',
+                paddingLeft: 5,
+              }}>
+              {etkinlikstart}
+            </Text>
+          </View>
+          <View style={{margin: 10}}>
+            <Text style={{marginLeft: 7}}>Etkinlik Bitiş Tarihi</Text>
+            <Text
+              style={{
+                borderWidth: 2,
+                width: 250,
+                height: 30,
+                borderRadius: 8,
+                textAlignVertical: 'center',
+                paddingLeft: 5,
+              }}>
+              {etkinlikend}
+            </Text>
+          </View>
+          <View style={{margin: 10}}>
+            <Text style={{marginLeft: 7}}>Davet Edilen Kullanıcılar</Text>
+            <Text
+              style={{
+                borderWidth: 2,
+                width: 250,
+                height: 30,
+                borderRadius: 8,
+                textAlignVertical: 'center',
+                paddingLeft: 5,
+              }}>
+              {etkinlikdavet}
+            </Text>
+          </View>
+          <View style={{margin: 10}}>
+            <Text style={{marginLeft: 7}}>Açıklamalar</Text>
+            <Text
+              style={{
+                borderWidth: 2,
+                width: 250,
+                height: 30,
+                borderRadius: 8,
+                textAlignVertical: 'center',
+                paddingLeft: 5,
+              }}>
+              {etkinlikaçıklama}
+            </Text>
+          </View>
+          <View style={{margin: 10}}>
+            <Text style={{marginLeft: 7}}>Görünürlük</Text>
+            <Text
+              style={{
+                borderWidth: 2,
+                width: 250,
+                height: 30,
+                borderRadius: 8,
+                textAlignVertical: 'center',
+                paddingLeft: 5,
+              }}>
+              {etkinlikgörünürlük}
+            </Text>
           </View>
         </View>
-      );
-    } else {
-      return (
-        <View style={styles.blackBackground}>
-          <View style={styles.poupContainer}>
-            <ScrollView>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  justifyContent: 'space-around',
-                  height: 635,
-                }}>
-                <View
-                  style={{
-                    width: 300,
-                    height: 500,
-                    borderWidth: 1,
-                    marginBottom: 10,
-                    borderRadius: 5,
-                    marginTop: 10,
-                  }}></View>
-                <View
-                  style={{
-                    width: 300,
-                    height: 100,
-                    borderWidth: 1,
-                    marginBottom: 10,
-                    borderRadius: 5,
-                    marginTop: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <TextInput
-                    style={{
-                      width: 230,
-                      height: 80,
-                      backgroundColor: '#efefef',
-                      marginLeft: 10,
-                      borderRadius: 10,
-                    }}
-                    editable
-                    multiline
-                    numberOfLines={5}
-                    maxLength={150}
-                    onChangeText={text => onChangeText(text)}
-                    value={value}></TextInput>
-                  <TouchableOpacity style={{marginRight: 2}}>
-                    <Text
-                      style={{
-                        width: 50,
-                        height: 80,
-                        textAlign: 'center',
-                        textAlignVertical: 'center',
-                        backgroundColor: '#cfcfcf',
-                        borderRadius: 10,
-                      }}>
-                      Gönder
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      );
-    }
+      </View>
+    );
   };
 
   return (
@@ -396,7 +320,6 @@ const Ortak = ({navigation}) => {
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
-          setMessageVisible(false);
         }}>
         <ModalInside />
       </Modal>
@@ -427,6 +350,23 @@ const Ortak = ({navigation}) => {
             markedDates={markedDate}
             markingType={'period'}
           />
+        </View>
+
+        <View>
+          <TouchableOpacity onPress={()=>{navigation.navigate('Filtre')}}>
+            <Text
+              style={{
+                width: 150,
+                height: 25,
+                borderWidth: 2,
+                borderRadius: 10,
+                marginTop: 10,
+                textAlign: 'center',
+                textAlignVertical: 'center',
+              }}>
+              Filtre Uygula
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={{marginTop: 10, alignItems: 'center'}}>
           <View
@@ -460,7 +400,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     width: 350,
     height: 390,
-    borderWidth: 1.3,
+    borderWidth: 2,
     borderRadius: 10,
     borderColor: 'black',
   },
@@ -469,8 +409,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 10,
     width: 350,
+    height: 550,
     backgroundColor: 'white',
-    borderWidth: 1.3,
+    borderWidth: 2,
     borderRadius: 10,
     opacity: 1,
   },

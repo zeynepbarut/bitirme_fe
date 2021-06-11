@@ -124,7 +124,7 @@ const Activity = ({navigation}) => {
         activity_name: activityName,
         activity_start_date: mergeStr(startDate),
         activity_end_date: mergeStr(endDate),
-        activity_view: 1,
+        activity_view: visibilty,
         activity_description: activityDes,
         activity_invited_user: strBuild
       }),
@@ -235,8 +235,8 @@ const Activity = ({navigation}) => {
             <Picker
               selectedValue={visibilty}
               onValueChange={itemValue => setVisibilty(itemValue)}>
-              <Picker.Item label="Herkese Açık" value="Genel" />
-              <Picker.Item label="Özel" value="Özel" />
+              <Picker.Item label="Herkese Açık" value="true" />
+              <Picker.Item label="Özel" value="false" />
             </Picker>
           </View>
         </View>

@@ -48,11 +48,7 @@ const Takvim = ({navigation}) => {
     await DataBuild()
     let token = await getToken();
     await saveUserId(token);
-  }, []);
-
-  
-
-  
+  },[]);
 
   const getToken = async () => {
     const jsonValue = await AsyncStorage.getItem('@store_token');

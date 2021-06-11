@@ -14,6 +14,7 @@ import {
   TextInput,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FriendTakvim from './FriendTakvim';
 
 const Friends = ({navigation}) => {
   const [userId, setId] = useState('');
@@ -475,6 +476,12 @@ const Friends = ({navigation}) => {
     return son;
   };
 
+  const goFriendTakvim = (name,surname) =>{
+    AsyncStorage.setItem('@selectedFriendName', name)
+    AsyncStorage.setItem('@selectedFriendSurname', surname)
+    navigation.navigate(FriendTakvim)
+  }
+
   const Friends = () => {
     const veri = [];
     let son = '';
@@ -496,7 +503,7 @@ const Friends = ({navigation}) => {
           }}>
           <View style={{flexDirection: 'row'}}>
             <Image
-              style={{width: 40, height: 40, tintColor: renk}}
+              style={{width: 40, height: 40, tintColor: renk, marginTop: 4}}
               source={require('../asset/images/user_icon.png')}
             />
             <Text
@@ -519,6 +526,13 @@ const Friends = ({navigation}) => {
               {allFriend[index]['surname']}
             </Text>
           </View>
+          <TouchableOpacity onPress={()=>{goFriendTakvim(allFriend[index]['name'],allFriend[index]['surname'])}}>
+            <View style={{justifyContent: 'flex-end'}}>
+              <Image
+                style={{width: 40, height: 40}}
+                source={require('../asset/images/takvim.png')}></Image>
+            </View>
+          </TouchableOpacity>
         </View>,
       );
     }
