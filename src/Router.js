@@ -11,9 +11,9 @@
 /* eslint-disable keyword-spacing */
 
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -24,13 +24,14 @@ import Activity from './pages/Activity';
 import Profile from './pages/Profile';
 import Friends from './pages/Friends';
 import Logout from './pages/Logout';
+import Takvim from './pages/takvim';
 
 const ProfileStack = createStackNavigator();
 const FriendsStack = createStackNavigator();
 const LogoutStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const ProfileStackScreen = ({navigation}) => (
+const ProfileStackScreen = ({ navigation }) => (
   <ProfileStack.Navigator
     screenOptions={{
       headerStyle: {
@@ -58,7 +59,7 @@ const ProfileStackScreen = ({navigation}) => (
   </ProfileStack.Navigator>
 );
 
-const FriendsStackScreen = ({navigation}) => (
+const FriendsStackScreen = ({ navigation }) => (
   <FriendsStack.Navigator
     screenOptions={{
       headerStyle: {
@@ -86,7 +87,7 @@ const FriendsStackScreen = ({navigation}) => (
   </FriendsStack.Navigator>
 );
 
-const LogoutStackScreen = ({navigation}) => (
+const LogoutStackScreen = ({ navigation }) => (
   <LogoutStack.Navigator
     screenOptions={{
       headerStyle: {
@@ -119,7 +120,7 @@ const Stack = createStackNavigator();
 const Router = () => {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Welcome">
+      <Drawer.Navigator initialRouteName="Activity">
         <Drawer.Screen name="Profil" component={ProfileStackScreen} />
         <Drawer.Screen name="Arkadaşlarım" component={FriendsStackScreen} />
         <Drawer.Screen name="Çıkış Yap" component={LogoutStackScreen} />
@@ -128,37 +129,50 @@ const Router = () => {
           name="Welcome"
           component={Welcome}
           options={{
-          headerShown: false,
-          drawerLabel: () => null,
+            headerShown: false,
+            drawerLabel: () => null,
           }}
         />
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{headerShown: false,
-          drawerLabel: () => null,
+          options={{
+            headerShown: false,
+            drawerLabel: () => null,
           }}
         />
         <Stack.Screen
           name="Signin"
           component={Signin}
-          options={{headerShown: false,
-          drawerLabel: () => null,
+          options={{
+            headerShown: false,
+            drawerLabel: () => null,
           }}
         />
         <Stack.Screen
           name="Activity"
           component={Activity}
-          options={{headerShown: false,
-          drawerLabel: () => null,
+          options={{
+            headerShown: false,
+            drawerLabel: () => null,
           }}
         />
 
         <Stack.Screen
           name="Profile"
           component={Profile}
-          options={{headerShown: false,
-          drawerLabel: () => null,
+          options={{
+            headerShown: false,
+            drawerLabel: () => null,
+          }}
+        />
+
+        <Stack.Screen
+          name="Takvim"
+          component={Takvim}
+          options={{
+            headerShown: false,
+            drawerLabel: () => null,
           }}
         />
       </Drawer.Navigator>
