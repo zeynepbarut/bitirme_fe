@@ -65,14 +65,16 @@ const Filtre = () => {
     let veri = [];
     let raw = '';
     let son = '';
-    let renk = '#125689';
-    for (let i = 0; i < liste.length; i++) {
-      
-      let startDate = liste[i]['activity_start_date'];
+
+    for (let index = 0; index < liste.length; index++) {
+      let renk =  liste[index]['color']
+      renk = '#' + renk
+
+      let startDate = liste[index]['activity_start_date'];
       startDate = startDate.substring(0, 10);
-      let endDate = liste[i]['activity_end_date'];
+      let endDate = liste[index]['activity_end_date'];
       endDate = endDate.substring(0, 10);
-      if (i + 1 == liste.length) {
+      if (index + 1 == liste.length) {
         son =
           son +
           '"' +
@@ -97,7 +99,46 @@ const Filtre = () => {
           renk +
           '", "textColor":"white"},';
       }
+    }
 
+    son = '{' + son + '}';
+    objTakvim = JSON.parse(son);
+
+    veri.push(
+      <View>
+        <View style={styles.takvimContainer}>
+          <Calendar
+            onDayPress={day => {
+              console.log('selected day', day);
+            }}
+            onDayLongPress={day => {
+              console.log('selected day', day);
+            }}
+            onMonthChange={month => {
+              console.log('month changed', month);
+            }}
+            hideArrows={false}
+            hideExtraDays={false}
+            disableMonthChange={false}
+            firstDay={1}
+            hideDayNames={false}
+            showWeekNumbers={false}
+            onPressArrowLeft={subtractMonth => subtractMonth()}
+            onPressArrowRight={addMonth => addMonth()}
+            disableArrowLeft={false}
+            disableArrowRight={false}
+            disableAllTouchEventsForDisabledDays={false}
+            enableSwipeMonths={true}
+            markedDates={objTakvim}
+            markingType={'period'}
+          />
+        </View>
+      </View>
+    )
+
+    for (let i = 0; i < liste.length; i++) {
+      let renk =  liste[i]['color']
+      renk = '#' + renk
       veri.push(
         <View
           style={{
@@ -107,7 +148,7 @@ const Filtre = () => {
             marginTop: 5,
             marginBottom: 5,
             borderRadius: 10,
-            backgroundColor: '#125689',
+            backgroundColor: renk,
           }}>
           <TouchableOpacity
             style={{flexDirection: 'row'}}
@@ -139,8 +180,7 @@ const Filtre = () => {
         </View>,
       );
     };
-    son = '{' + son + '}';
-    objTakvim = JSON.parse(son);
+    
     return veri;
   }
 
@@ -148,33 +188,7 @@ const Filtre = () => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.takvimContainer}>
-          <Calendar
-            onDayPress={day => {
-              console.log('selected day', day);
-            }}
-            onDayLongPress={day => {
-              console.log('selected day', day);
-            }}
-            onMonthChange={month => {
-              console.log('month changed', month);
-            }}
-            hideArrows={false}
-            hideExtraDays={false}
-            disableMonthChange={false}
-            firstDay={1}
-            hideDayNames={false}
-            showWeekNumbers={false}
-            onPressArrowLeft={subtractMonth => subtractMonth()}
-            onPressArrowRight={addMonth => addMonth()}
-            disableArrowLeft={false}
-            disableArrowRight={false}
-            disableAllTouchEventsForDisabledDays={false}
-            enableSwipeMonths={true}
-            markedDates={markedDate}
-            markingType={'period'}
-          />
-        </View>
+        
         <View style={{flexDirection: 'row', marginTop: 10}}>
           <View style={{flex: 1, width: 300, marginRight: 10}}>
             <NewActivity />

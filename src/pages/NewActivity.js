@@ -39,7 +39,7 @@ class NewActivity extends Component {
             }}
             onSelectedItemsChange={this.onSelectedItemsChange}
             selectedItems={selectedItems}
-            selectText="Pick Items"
+            selectText="Arkadaş Seçin"
             searchInputPlaceholderText="Search Items..."
             onChangeInput={text => console.log(text)}
             altFontFamily="ProximaNova-Light"

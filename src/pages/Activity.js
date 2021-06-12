@@ -243,7 +243,20 @@ const Activity = ({navigation}) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            saveActivity();
+            
+            let Time = new Date().getTime()
+            let Start = new Date(startDate).getTime()
+            let End = new Date(endDate).getTime()
+            if(End > Start){
+              if(Start > Time){
+                saveActivity();
+              }else{
+                Alert.alert("Girdiğinz Tarih Şuandan Daha Önce Olamaz")
+              }
+            }else{
+              Alert.alert("Girdiğinz Bitiş Tarihi Başlangıç Tarihinden Önce Olamaz ")
+            }
+            
           }}>
           <Text style={styles.text}>Etkinlik Düzenle</Text>
         </TouchableOpacity>

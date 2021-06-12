@@ -40,7 +40,6 @@ const FriendTakvim = () => {
         surname: surname,
       }),
     };
-    console.log(requestOptions2.body);
     await fetch(
       'http://172.28.1.143:5000/api/auth/get-friend-activity',
       requestOptions2,
@@ -52,7 +51,7 @@ const FriendTakvim = () => {
   const Ekran = () => {
     let veri = [];
     let son = '';
-    let renk = '#156369';
+    let renk = '#cfcfcf';
     for (let index = 0; index < strData.length; index++) {
       let startDate = strData[index]['activity_start_date'];
       startDate = startDate.substring(0, 10);
@@ -123,15 +122,15 @@ const FriendTakvim = () => {
       <View>
         <View style={{flexDirection: 'row'}}>
           <Text style={{width: 100, textAlign: 'center'}}>Aktivite Adı</Text>
-          <Text style={{width: 150}}>Aktivite Başlıngıç Tarihi</Text>
-          <Text style={{width: 150}}>Aktivite Bitiş Tarihi</Text>
+          <Text style={{width: 150}}>Aktivite Başlıngıç Saati</Text>
+          <Text style={{width: 150}}>Aktivite Bitiş Saati</Text>
         </View>
         <View style={{borderWidth: 1.5, width: 400, height: 0.5}}></View>
       </View>,
     );
     for (let index = 0; index < strData.length; index++) {
       veri.push(
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'center',borderWidth:2,margin:5,height:40,borderRadius:10,justifyContent:'center',alignItems:'center'}}>
           <Text style={{width: 100, textAlign: 'center'}}>
             {strData[index]['activity_name']}
           </Text>
@@ -149,7 +148,7 @@ const FriendTakvim = () => {
   };
 
   return (
-    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{justifyContent: 'center', alignItems: 'center',backgroundColor:'#fff'}}>
       <Ekran />
     </View>
   );

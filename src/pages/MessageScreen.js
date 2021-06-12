@@ -46,7 +46,7 @@ const MessageScreen = (props) => {
   const sendMessage = async (user, etkinlik) => {
     const requestOptions = {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', Accept: 'text/plain'},
+      headers: {'Content-Type': 'application/json', Accept: 'text/splain'},
       body: JSON.stringify({
         userId: user,
         activityId: etkinlik,

@@ -72,11 +72,14 @@ const Ortak = ({navigation}) => {
   };
 
   const getOrtakActivity = async b => {
+    let Time = new Date().getTime()
+    console.log(Time)
     const requestOptions2 = {
       method: 'POST',
       headers: {'Content-Type': 'application/json', Accept: 'text/plain'},
       body: JSON.stringify({
         id: b,
+        time: Time
       }),
     };
 
@@ -125,22 +128,18 @@ const Ortak = ({navigation}) => {
   };
   const Str = () => {
     let veri = [];
-    let renk = '#467523';
     raw = '';
     son = '';
-    for (let i = 0; i < strData.length; i++) {
-      if (strData[i]['name'] == 'Ahmet') {
-        renk = '#156369';
-      }
-      if (strData[i]['name'] == 'Cihad') {
-        renk = '#966369';
-      }
 
-      let startDate = strData[i]['activity_start_date'];
+    for (let index = 0; index < strData.length; index++) {
+      let renk = strData[index]['color'];
+      renk = '#' + renk;
+
+      let startDate = strData[index]['activity_start_date'];
       startDate = startDate.substring(0, 10);
-      let endDate = strData[i]['activity_end_date'];
+      let endDate = strData[index]['activity_end_date'];
       endDate = endDate.substring(0, 10);
-      if (i + 1 == strData.length) {
+      if (index + 1 == strData.length) {
         son =
           son +
           '"' +
@@ -165,7 +164,79 @@ const Ortak = ({navigation}) => {
           renk +
           '", "textColor":"white"},';
       }
+    }
 
+    son = '{' + son + '}';
+    objTakvim = JSON.parse(son);
+
+    veri.push(
+      <View style={{justifyContent:'center',alignItems:'center'}}>
+        <View style={styles.takvimContainer}>
+          <Calendar
+            onDayPress={day => {
+              console.log('selected day', day);
+            }}
+            onDayLongPress={day => {
+              console.log('selected day', day);
+            }}
+            onMonthChange={month => {
+              console.log('month changed', month);
+            }}
+            hideArrows={false}
+            hideExtraDays={false}
+            disableMonthChange={false}
+            firstDay={1}
+            hideDayNames={false}
+            showWeekNumbers={false}
+            onPressArrowLeft={subtractMonth => subtractMonth()}
+            onPressArrowRight={addMonth => addMonth()}
+            disableArrowLeft={false}
+            disableArrowRight={false}
+            disableAllTouchEventsForDisabledDays={false}
+            enableSwipeMonths={true}
+            markedDates={objTakvim}
+            markingType={'period'}
+          />
+        </View>
+
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Filtre');
+            }}>
+            <Text
+              style={{
+                width: 150,
+                height: 25,
+                borderWidth: 2,
+                borderRadius: 10,
+                marginTop: 10,
+                textAlign: 'center',
+                textAlignVertical: 'center',
+              }}>
+              Filtre Uygula
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{marginTop: 10, alignItems: 'center'}}>
+          <View
+            style={{flexDirection: 'row', alignItems: 'center', width: 390}}>
+            <Text style={{textAlign: 'center', width: 130}}>Etkinlik Adı</Text>
+            <Text style={{textAlign: 'center', width: 130}}>
+              Etkinlik Başlangıç Saati
+            </Text>
+            <Text style={{textAlign: 'center', width: 130}}>
+              Etkinlik Bitiş Saati
+            </Text>
+          </View>
+          <View style={{borderBottomWidth: 1, width: 400}}></View>
+        </View>
+      </View>,
+    );
+
+    for (let i = 0; i < strData.length; i++) {
+      let renk = strData[i]['color'];
+      renk = '#' + renk;
       veri.push(
         <View
           style={{
@@ -206,16 +277,8 @@ const Ortak = ({navigation}) => {
           </TouchableOpacity>
         </View>,
       );
-
-      // if (i + 1 == strData.length) {
-      //   console.log("1");
-      // }else if (strData[i]['name'] != strData[i + 1]['name']) {
-      //   renk = Math.floor(Math.random() * (999 - 100) + 100);
-      //   renk = '#' + renk;
-      // }
     }
-    son = '{' + son + '}';
-    objTakvim = JSON.parse(son);
+
     return veri;
   };
 
@@ -324,63 +387,6 @@ const Ortak = ({navigation}) => {
         <ModalInside />
       </Modal>
       <View style={styles.container}>
-        <View style={styles.takvimContainer}>
-          <Calendar
-            onDayPress={day => {
-              console.log('selected day', day);
-            }}
-            onDayLongPress={day => {
-              console.log('selected day', day);
-            }}
-            onMonthChange={month => {
-              console.log('month changed', month);
-            }}
-            hideArrows={false}
-            hideExtraDays={false}
-            disableMonthChange={false}
-            firstDay={1}
-            hideDayNames={false}
-            showWeekNumbers={false}
-            onPressArrowLeft={subtractMonth => subtractMonth()}
-            onPressArrowRight={addMonth => addMonth()}
-            disableArrowLeft={false}
-            disableArrowRight={false}
-            disableAllTouchEventsForDisabledDays={false}
-            enableSwipeMonths={true}
-            markedDates={markedDate}
-            markingType={'period'}
-          />
-        </View>
-
-        <View>
-          <TouchableOpacity onPress={()=>{navigation.navigate('Filtre')}}>
-            <Text
-              style={{
-                width: 150,
-                height: 25,
-                borderWidth: 2,
-                borderRadius: 10,
-                marginTop: 10,
-                textAlign: 'center',
-                textAlignVertical: 'center',
-              }}>
-              Filtre Uygula
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{marginTop: 10, alignItems: 'center'}}>
-          <View
-            style={{flexDirection: 'row', alignItems: 'center', width: 390}}>
-            <Text style={{textAlign: 'center', width: 130}}>Activity Name</Text>
-            <Text style={{textAlign: 'center', width: 130}}>
-              Activity Start Date
-            </Text>
-            <Text style={{textAlign: 'center', width: 130}}>
-              Activity End Date
-            </Text>
-          </View>
-          <View style={{borderBottomWidth: 1, width: 400}}></View>
-        </View>
         <Str />
       </View>
     </ScrollView>

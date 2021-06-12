@@ -172,7 +172,7 @@ const Friends = ({navigation}) => {
     await fetch(
       'http://172.28.1.143:5000/api/auth/add-friend',
       requestOptions2,
-    ).then(res => console.log(res.status));
+    ).then(res => e.log(res.status));
   };
 
   const acceptFriend = async (name, surname) => {
@@ -207,7 +207,7 @@ const Friends = ({navigation}) => {
     await fetch(
       'http://172.28.1.143:5000/api/auth/accept',
       requestOptions2,
-    ).then(res => console.log(res.status));
+    ).then(res => e.log(res.status));
   };
 
   const deniedFriend = async (name, surname) => {
@@ -242,7 +242,7 @@ const Friends = ({navigation}) => {
     await fetch(
       'http://172.28.1.143:5000/api/auth/denied',
       requestOptions2,
-    ).then(res => console.log(res.status));
+    ).then(res => e.log(res.status));
   };
 
   const ModelIn = () => {
@@ -250,7 +250,7 @@ const Friends = ({navigation}) => {
     let son = '';
     if (requestVisiable == false) {
       for (let index = 0; index < allUsers.length; index++) {
-        let renk = Math.floor(Math.random() * (999 - 100) + 100);
+        let renk = allUsers[index]['color'];
         renk = '#' + renk;
         veri.push(
           <View
@@ -347,7 +347,7 @@ const Friends = ({navigation}) => {
       );
     } else {
       for (let index = 0; index < allWaitUsers.length; index++) {
-        let renk = Math.floor(Math.random() * (999 - 100) + 100);
+        let renk = allWaitUsers[index]['color'];
         renk = '#' + renk;
         veri.push(
           <View
@@ -476,17 +476,17 @@ const Friends = ({navigation}) => {
     return son;
   };
 
-  const goFriendTakvim = (name,surname) =>{
-    AsyncStorage.setItem('@selectedFriendName', name)
-    AsyncStorage.setItem('@selectedFriendSurname', surname)
-    navigation.navigate(FriendTakvim)
-  }
+  const goFriendTakvim = (name, surname) => {
+    AsyncStorage.setItem('@selectedFriendName', name);
+    AsyncStorage.setItem('@selectedFriendSurname', surname);
+    navigation.navigate(FriendTakvim);
+  };
 
   const Friends = () => {
     const veri = [];
     let son = '';
     for (let index = 0; index < allFriend.length; index++) {
-      let renk = Math.floor(Math.random() * (999 - 100) + 100);
+      let renk = allFriend[index]['color'];
       renk = '#' + renk;
       veri.push(
         <View
@@ -526,13 +526,31 @@ const Friends = ({navigation}) => {
               {allFriend[index]['surname']}
             </Text>
           </View>
-          <TouchableOpacity onPress={()=>{goFriendTakvim(allFriend[index]['name'],allFriend[index]['surname'])}}>
-            <View style={{justifyContent: 'flex-end'}}>
+          <View style={{flexDirection:'row'}}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("arkadaşlıktan çıkar")
+              }}>
+              <View style={{backgroundColor:'#912',height:40,width:40,borderRadius:20,marginRight:5,justifyContent:'center',alignItems:'center'}}>
               <Image
-                style={{width: 40, height: 40}}
-                source={require('../asset/images/takvim.png')}></Image>
-            </View>
-          </TouchableOpacity>
+                  style={{height:35,width:35}}
+                  source={require('../asset/images/friendDelete.png')}></Image>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                goFriendTakvim(
+                  allFriend[index]['name'],
+                  allFriend[index]['surname'],
+                );
+              }}>
+              <View style={{justifyContent: 'flex-end'}}>
+                <Image
+                  style={{width: 40, height: 40}}
+                  source={require('../asset/images/takvim.png')}></Image>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>,
       );
     }

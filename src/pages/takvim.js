@@ -20,15 +20,16 @@ import {
   Modal,
   Pressable,
   TextInput,
-  LogBox
+  LogBox,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Calendar, Arrow, CalendarList, Agenda} from 'react-native-calendars';
 import MessageScreen from './MessageScreen';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-LogBox.ignoreAllLogs();//Ignore all log notifications
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const Takvim = ({navigation}) => {
+  let objTakvim = '';
   const [strData, setStrData] = useState('');
   const [takvimData, setTakvimData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,10 +46,9 @@ const Takvim = ({navigation}) => {
   const [markedDate, setMarkedDate] = useState({});
 
   useEffect(async () => {
-    await DataBuild()
     let token = await getToken();
     await saveUserId(token);
-  },[]);
+  }, []);
 
   const getToken = async () => {
     const jsonValue = await AsyncStorage.getItem('@store_token');
@@ -75,7 +75,6 @@ const Takvim = ({navigation}) => {
         return a;
       })
       .then(async deger => {
-        
         await getUserActivity(deger);
       });
   };
@@ -94,43 +93,13 @@ const Takvim = ({navigation}) => {
       requestOptions2,
     );
     await response2.json().then(body2 => {
-      setStrData(JSON.stringify(body2.Activities).split('"'));
+      setStrData(body2.Activities);
     });
   };
   let modelIn = [];
   let raw = '';
   let son = '';
   let lastraw = '';
-
-  const DataBuild = async () => {
-    lastraw = '';
-    raw = '';
-    son = '';
-    for (let i = 1; i < strData.length; i = i + 12) {
-      let parca1 = JSON.stringify(strData[i + 6]).split(' ');
-      let parca2 = JSON.stringify(strData[i + 10]).split(' ');
-      
-      let startDate = parca1[0].substring(1);
-      let endDate = parca2[0].substring(1);
-      let raw3 = '"';
-      let raw4 = '": {"color": "#125678", "textColor": "white"},';
-      if ((i + 10) == (strData.length - 2)) {
-        let raw5 = '": {"color": "#125678", "textColor": "white"}'
-        son = son + raw3 + startDate + raw4 + raw3 + endDate + raw5;
-      }else{
-        son = son + raw3 + startDate + raw4 + raw3 + endDate + raw4;
-      }
-      
-    }
-    let raw1 = "{";
-    let raw2 = "}";
-    lastraw = raw1 + son + raw2;
-    let a =JSON.parse(lastraw)
-    console.log(a)
-    setMarkedDate(a)
-  };
-
-  
 
   const EtkinlikDetay = async (name, start, end) => {
     const requestOptions3 = {
@@ -164,29 +133,116 @@ const Takvim = ({navigation}) => {
 
   const Str = () => {
     let veri = [];
-    for (let i = 1; i < strData.length; i = i + 12) {
+    lastraw = '';
+    raw = '';
+    son = '';
+
+    for (let index = 0; index < strData.length; index++) {
+      let renk = '#afafaf';
+
+      let startDate = strData[index]['activity_start_date'];
+      startDate = startDate.substring(0, 10);
+      let endDate = strData[index]['activity_end_date'];
+      endDate = endDate.substring(0, 10);
+      if (index + 1 == strData.length) {
+        son =
+          son +
+          '"' +
+          startDate +
+          '": {"color": "' +
+          renk +
+          '", "textColor": "white"},"' +
+          endDate +
+          '":{"color":"' +
+          renk +
+          '", "textColor":"white"}';
+      } else {
+        son =
+          son +
+          '"' +
+          startDate +
+          '": {"color": "' +
+          renk +
+          '", "textColor": "white"},"' +
+          endDate +
+          '":{"color":"' +
+          renk +
+          '", "textColor":"white"},';
+      }
+    }
+
+    son = '{' + son + '}';
+    objTakvim = JSON.parse(son);
+
+    veri.push(
+      <View style={{justifyContent:'center',alignItems:'center'}}>
+        <View style={styles.takvimContainer}>
+          <Calendar
+            onDayPress={day => {
+              console.log('selected day', day);
+            }}
+            onDayLongPress={day => {
+              console.log('selected day', day);
+            }}
+            onMonthChange={month => {
+              console.log('month changed', month);
+            }}
+            hideArrows={false}
+            hideExtraDays={false}
+            disableMonthChange={false}
+            firstDay={1}
+            hideDayNames={false}
+            showWeekNumbers={false}
+            onPressArrowLeft={subtractMonth => subtractMonth()}
+            onPressArrowRight={addMonth => addMonth()}
+            disableArrowLeft={false}
+            disableArrowRight={false}
+            disableAllTouchEventsForDisabledDays={false}
+            enableSwipeMonths={true}
+            markedDates={objTakvim}
+            markingType={'period'}
+          />
+        </View>
+        <View style={{marginTop: 10, alignItems: 'center'}}>
+          <View
+            style={{flexDirection: 'row', alignItems: 'center', width: 390}}>
+            <Text style={{width: 100}}>Etkinlik Adı</Text>
+            <Text style={{width: 145}}>Etkinlik Başlangıç Saati</Text>
+            <Text style={{width: 145,marginLeft:15}}>Etkinlik Bitiş Saati</Text>
+          </View>
+          <View style={{borderBottomWidth: 1, width: 400}}></View>
+        </View>
+      </View>,
+    );
+
+    for (let i = 0; i < strData.length; i ++) {
       veri.push(
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            width: 390,
-            marginBottom:10,
+            alignItems:'center',
+            width: 400,
+            height: 40,
+            marginBottom: 5,
+            borderWidth:2,
+            borderRadius: 10,
+            marginTop:5
           }}>
           <TouchableOpacity
             style={{flexDirection: 'row'}}
             onPress={() => {
-              EtkinlikDetay(strData[i + 2], strData[i + 6], strData[i + 10]);
+              EtkinlikDetay(strData[i]['activity_name'], strData[i]['activity_start_date'], strData[i]['activity_end_date']);
               setModalVisible(true);
             }}>
-            <View style={{width:100}}>
-              <Text>{strData[i + 2]}</Text>
+            <View style={{width: 100,marginLeft:5}}>
+              <Text>{strData[i]['activity_name']}</Text>
             </View>
-            <View style={{width:145}}>
-              <Text>{strData[i + 6]}</Text>
+            <View style={{width: 145}}>
+              <Text>{strData[i]['activity_start_date']}</Text>
             </View>
-            <View style={{width:145}}>
-              <Text>{strData[i + 10]}</Text>
+            <View style={{width: 145}}>
+              <Text>{strData[i]['activity_end_date']}</Text>
             </View>
           </TouchableOpacity>
         </View>,
@@ -325,7 +381,7 @@ const Takvim = ({navigation}) => {
     } else {
       return (
         <View style={styles.blackBackground}>
-          <MessageScreen userId = {userId} etkinlikId = {etkinlikId}/>
+          <MessageScreen userId={userId} etkinlikId={etkinlikId} />
         </View>
       );
     }
@@ -344,42 +400,6 @@ const Takvim = ({navigation}) => {
         <ModalInside />
       </Modal>
       <View style={styles.container}>
-        <View style={styles.takvimContainer}>
-          <Calendar
-            onDayPress={day => {
-              console.log('selected day', day);
-            }}
-            onDayLongPress={day => {
-              console.log('selected day', day);
-            }}
-            onMonthChange={month => {
-              console.log('month changed', month);
-            }}
-            hideArrows={false}
-            hideExtraDays={false}
-            disableMonthChange={false}
-            firstDay={1}
-            hideDayNames={false}
-            showWeekNumbers={false}
-            onPressArrowLeft={subtractMonth => subtractMonth()}
-            onPressArrowRight={addMonth => addMonth()}
-            disableArrowLeft={false}
-            disableArrowRight={false}
-            disableAllTouchEventsForDisabledDays={false}
-            enableSwipeMonths={true}
-            markedDates={markedDate}
-            markingType={'period'}
-          />
-        </View>
-        <View style={{marginTop: 10, alignItems: 'center'}}>
-          <View
-            style={{flexDirection: 'row', alignItems: 'center', width: 390}}>
-            <Text style={{width:100}}>Activity Name</Text>
-            <Text style={{width:145}}>Activity Start Date</Text>
-            <Text style={{width:145}}>Activity End Date</Text>
-          </View>
-          <View style={{borderBottomWidth: 1, width: 400}}></View>
-        </View>
         <Str />
       </View>
     </ScrollView>
